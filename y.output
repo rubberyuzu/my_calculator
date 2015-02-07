@@ -1,0 +1,561 @@
+Grammar
+
+    0 $accept: line_list $end
+
+    1 line_list: line
+    2          | line_list line
+
+    3 line: expression CR
+
+    4 expression: term
+    5           | SUB term
+    6           | expression ADD term
+    7           | expression SUB term
+
+    8 term: primary_expression
+    9     | term MUL primary_expression
+   10     | term DIV primary_expression
+   11     | term POW primary_expression
+   12     | ROOT primary_expression
+   13     | term MOD primary_expression
+
+   14 primary_expression: DOUBLE_LITERAL
+   15                   | PI
+   16                   | LP expression RP
+   17                   | primary_expression FACT
+   18                   | LFLOOR expression RFLOOR
+   19                   | ABS expression ABS
+   20                   | LOG LP expression RP
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+DOUBLE_LITERAL (258) 14
+ADD (259) 6
+SUB (260) 5 7
+MUL (261) 9
+DIV (262) 10
+FACT (263) 17
+LFLOOR (264) 18
+RFLOOR (265) 18
+ABS (266) 19
+POW (267) 11
+ROOT (268) 12
+MOD (269) 13
+LOG (270) 20
+PI (271) 15
+CR (272) 3
+LP (273) 16 20
+RP (274) 16 20
+
+
+Nonterminals, with rules where they appear
+
+$accept (20)
+    on left: 0
+line_list (21)
+    on left: 1 2, on right: 0 2
+line (22)
+    on left: 3, on right: 1 2
+expression (23)
+    on left: 4 5 6 7, on right: 3 6 7 16 18 19 20
+term (24)
+    on left: 8 9 10 11 12 13, on right: 4 5 6 7 9 10 11 13
+primary_expression (25)
+    on left: 14 15 16 17 18 19 20, on right: 8 9 10 11 12 13 17
+
+
+state 0
+
+    0 $accept: . line_list $end
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    line_list           go to state 9
+    line                go to state 10
+    expression          go to state 11
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 1
+
+   14 primary_expression: DOUBLE_LITERAL .
+
+    $default  reduce using rule 14 (primary_expression)
+
+
+state 2
+
+    5 expression: SUB . term
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    term                go to state 14
+    primary_expression  go to state 13
+
+
+state 3
+
+   18 primary_expression: LFLOOR . expression RFLOOR
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    expression          go to state 15
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 4
+
+   19 primary_expression: ABS . expression ABS
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    expression          go to state 16
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 5
+
+   12 term: ROOT . primary_expression
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    primary_expression  go to state 17
+
+
+state 6
+
+   20 primary_expression: LOG . LP expression RP
+
+    LP  shift, and go to state 18
+
+
+state 7
+
+   15 primary_expression: PI .
+
+    $default  reduce using rule 15 (primary_expression)
+
+
+state 8
+
+   16 primary_expression: LP . expression RP
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    expression          go to state 19
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 9
+
+    0 $accept: line_list . $end
+    2 line_list: line_list . line
+
+    $end            shift, and go to state 20
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    line                go to state 21
+    expression          go to state 11
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 10
+
+    1 line_list: line .
+
+    $default  reduce using rule 1 (line_list)
+
+
+state 11
+
+    3 line: expression . CR
+    6 expression: expression . ADD term
+    7           | expression . SUB term
+
+    ADD  shift, and go to state 22
+    SUB  shift, and go to state 23
+    CR   shift, and go to state 24
+
+
+state 12
+
+    4 expression: term .
+    9 term: term . MUL primary_expression
+   10     | term . DIV primary_expression
+   11     | term . POW primary_expression
+   13     | term . MOD primary_expression
+
+    MUL  shift, and go to state 25
+    DIV  shift, and go to state 26
+    POW  shift, and go to state 27
+    MOD  shift, and go to state 28
+
+    $default  reduce using rule 4 (expression)
+
+
+state 13
+
+    8 term: primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 8 (term)
+
+
+state 14
+
+    5 expression: SUB term .
+    9 term: term . MUL primary_expression
+   10     | term . DIV primary_expression
+   11     | term . POW primary_expression
+   13     | term . MOD primary_expression
+
+    MUL  shift, and go to state 25
+    DIV  shift, and go to state 26
+    POW  shift, and go to state 27
+    MOD  shift, and go to state 28
+
+    $default  reduce using rule 5 (expression)
+
+
+state 15
+
+    6 expression: expression . ADD term
+    7           | expression . SUB term
+   18 primary_expression: LFLOOR expression . RFLOOR
+
+    ADD     shift, and go to state 22
+    SUB     shift, and go to state 23
+    RFLOOR  shift, and go to state 30
+
+
+state 16
+
+    6 expression: expression . ADD term
+    7           | expression . SUB term
+   19 primary_expression: ABS expression . ABS
+
+    ADD  shift, and go to state 22
+    SUB  shift, and go to state 23
+    ABS  shift, and go to state 31
+
+
+state 17
+
+   12 term: ROOT primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 12 (term)
+
+
+state 18
+
+   20 primary_expression: LOG LP . expression RP
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    SUB             shift, and go to state 2
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    expression          go to state 32
+    term                go to state 12
+    primary_expression  go to state 13
+
+
+state 19
+
+    6 expression: expression . ADD term
+    7           | expression . SUB term
+   16 primary_expression: LP expression . RP
+
+    ADD  shift, and go to state 22
+    SUB  shift, and go to state 23
+    RP   shift, and go to state 33
+
+
+state 20
+
+    0 $accept: line_list $end .
+
+    $default  accept
+
+
+state 21
+
+    2 line_list: line_list line .
+
+    $default  reduce using rule 2 (line_list)
+
+
+state 22
+
+    6 expression: expression ADD . term
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    term                go to state 34
+    primary_expression  go to state 13
+
+
+state 23
+
+    7 expression: expression SUB . term
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    ROOT            shift, and go to state 5
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    term                go to state 35
+    primary_expression  go to state 13
+
+
+state 24
+
+    3 line: expression CR .
+
+    $default  reduce using rule 3 (line)
+
+
+state 25
+
+    9 term: term MUL . primary_expression
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    primary_expression  go to state 36
+
+
+state 26
+
+   10 term: term DIV . primary_expression
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    primary_expression  go to state 37
+
+
+state 27
+
+   11 term: term POW . primary_expression
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    primary_expression  go to state 38
+
+
+state 28
+
+   13 term: term MOD . primary_expression
+
+    DOUBLE_LITERAL  shift, and go to state 1
+    LFLOOR          shift, and go to state 3
+    ABS             shift, and go to state 4
+    LOG             shift, and go to state 6
+    PI              shift, and go to state 7
+    LP              shift, and go to state 8
+
+    primary_expression  go to state 39
+
+
+state 29
+
+   17 primary_expression: primary_expression FACT .
+
+    $default  reduce using rule 17 (primary_expression)
+
+
+state 30
+
+   18 primary_expression: LFLOOR expression RFLOOR .
+
+    $default  reduce using rule 18 (primary_expression)
+
+
+state 31
+
+   19 primary_expression: ABS expression ABS .
+
+    $default  reduce using rule 19 (primary_expression)
+
+
+state 32
+
+    6 expression: expression . ADD term
+    7           | expression . SUB term
+   20 primary_expression: LOG LP expression . RP
+
+    ADD  shift, and go to state 22
+    SUB  shift, and go to state 23
+    RP   shift, and go to state 40
+
+
+state 33
+
+   16 primary_expression: LP expression RP .
+
+    $default  reduce using rule 16 (primary_expression)
+
+
+state 34
+
+    6 expression: expression ADD term .
+    9 term: term . MUL primary_expression
+   10     | term . DIV primary_expression
+   11     | term . POW primary_expression
+   13     | term . MOD primary_expression
+
+    MUL  shift, and go to state 25
+    DIV  shift, and go to state 26
+    POW  shift, and go to state 27
+    MOD  shift, and go to state 28
+
+    $default  reduce using rule 6 (expression)
+
+
+state 35
+
+    7 expression: expression SUB term .
+    9 term: term . MUL primary_expression
+   10     | term . DIV primary_expression
+   11     | term . POW primary_expression
+   13     | term . MOD primary_expression
+
+    MUL  shift, and go to state 25
+    DIV  shift, and go to state 26
+    POW  shift, and go to state 27
+    MOD  shift, and go to state 28
+
+    $default  reduce using rule 7 (expression)
+
+
+state 36
+
+    9 term: term MUL primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 9 (term)
+
+
+state 37
+
+   10 term: term DIV primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 10 (term)
+
+
+state 38
+
+   11 term: term POW primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 11 (term)
+
+
+state 39
+
+   13 term: term MOD primary_expression .
+   17 primary_expression: primary_expression . FACT
+
+    FACT  shift, and go to state 29
+
+    $default  reduce using rule 13 (term)
+
+
+state 40
+
+   20 primary_expression: LOG LP expression RP .
+
+    $default  reduce using rule 20 (primary_expression)
